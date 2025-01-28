@@ -12,11 +12,23 @@ class menuMaker{
         this.makeMenu()
         this.secondsLeft = 180 
         this.timer = setInterval( () => this.countdown(), 1000 )
+        this.solutionOrder = ['white', 'black', 'blue', 'green', 'white', 'blue', 'green', 'red'] 
     }
 
     countdown(){
         this.secondsLeft--
         select('#time').html(this.secondsLeft)
+        if(this.secondsLeft == 150){
+            select('#hint').html('Klik på knapperne i bunden for at regne rækkefølgen ud')
+        }
+        if(this.secondsLeft == 60){
+            select('#hint').html('Du skal bruge knappens farve og sidens baggrundsfarve til at regne rækkefølgen ud')
+        }
+        if(this.secondsLeft == 0){
+            select('#result').html('Du har tabt - rejsen slutter her')
+            clearInterval(this.timer)
+            shiftPage(5)
+        }
     }
 
     makeMenu(){
@@ -93,13 +105,6 @@ function draw(){
 }
 
 function shiftPage(num){
-    if(num == "ArrowLeft"){
-        num = currentPage - 1
-    }
-    if(num == "ArrowRight"){
-        num = currentPage + 1
-    }
-
     if(isNaN(num) || num > pages.length || num == 0){
         return
     }
@@ -108,8 +113,4 @@ function shiftPage(num){
     select("#page" + currentPage).addClass('visible')
 }
 
-function keyPressed(){
-    console.log(key)
-    shiftPage(key)
-}
 

@@ -4,7 +4,7 @@
     box-sizing: border-box;
 }
 
-.page{
+.page, #helpText{
     position:fixed;
     top:0;
     left:-100vw;
@@ -15,6 +15,11 @@
     display:grid;
     place-items:center;
     transition: 0.3s 0.3s all ease-in-out;
+}
+
+#helpText{
+    left:0;
+    z-index:1;
 }
 
 #time {
@@ -59,4 +64,8 @@ h1{
     font-family: Arial;
     color:white;
     font-weight: bolder;
+}
+#hint{
+    font-size:3rem;
+    color:whitesmoke;
 }
