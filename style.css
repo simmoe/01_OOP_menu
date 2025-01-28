@@ -10,10 +10,15 @@
     left:-100vw;
     width:100vw;
     height: 100vh;
+    padding:12rem;
     overflow:hidden;
     display:grid;
     place-items:center;
     transition: 0.3s 0.3s all ease-in-out;
+}
+
+#time {
+    font-size:10rem;
 }
 
 canvas{
@@ -25,6 +30,7 @@ canvas{
 button {
     z-index:3;
     border-radius:50%;
+    font-size:4rem;
 }
 
 .visible{
@@ -33,20 +39,24 @@ button {
 }
 
 #page1{
-    background-color: lightskyblue;
+    background-color: black;
 }
 
 #page2{
-    background-color: lightgreen;
+    background-color: green;
 }
 #page3{
-    background-color: lightcyan;
+    background-color: blue;
 }
 #page4{
-    background-color: lightseagreen;
+    background-color: red;
+}
+#page5{
+    background-color: khaki;
 }
 
 h1{
-    font-family: Raleway;
-    color:hotpink;
+    font-family: Arial;
+    color:white;
+    font-weight: bolder;
 }

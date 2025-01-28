@@ -1,23 +1,30 @@
-let currentPage = 2
+let currentPage = 1
 let pages //array med alle elementer med class = page 
-
 let gravity = 1
 
-//Menu maker er en klasse som kigger i html dokumentret efter en div som har id=menu - og laver en menu ud fra de punkter
+//Menu maker er en klasse som kigger i html dokumentet efter en div som har id=menu - og laver en menu ud fra de punkter
 class menuMaker{
     constructor(){
         this.menuItems = selectAll('#menu div')
         this.itemSize = 100
-        this.itemGap = 100
+        this.itemGap = (width - this.menuItems.length * this.itemSize) / (this.menuItems.length + 1)
         this.menuBalls = []
         this.makeMenu()
+        this.secondsLeft = 180 
+        this.timer = setInterval( () => this.countdown(), 1000 )
     }
+
+    countdown(){
+        this.secondsLeft--
+        select('#time').html(this.secondsLeft)
+    }
+
     makeMenu(){
         //console.log(this.menuItems)
-        let startX = 200
+        let startX = this.itemGap
         for(const menuItem of this.menuItems){
             //console.log(menuItem.attribute('data-page'))
-            let b = new Ball(this.itemSize, menuItem.attribute('data-page'), menuItem.html(), 'orange', startX)
+            let b = new Ball(this.itemSize, menuItem.attribute('data-page'), menuItem.html(), menuItem.attribute('data-color'), startX)
             startX += this.itemSize + this.itemGap
             this.menuBalls.push(b)
         }
@@ -41,7 +48,7 @@ class Ball{
         this.gravity = gravity
         this.ballAir = .97
         this.ballVelocity = 0
-        this.ballY = 0
+        this.ballY = -this.ballX
         this.ballButton = createButton(this.ballLink)
         this.ballButton.size(this.ballDiameter, this.ballDiameter)
         this.ballButton.mousePressed( () => shiftPage(this.ballPage) )
@@ -69,7 +76,6 @@ class Ball{
 let menu
 
 function setup(){    
-    console.log('P5.js er loaded')
     pages = selectAll('.page')
     //nu kan man se at pages er blevet til en liste med alle class = page ting
     console.log(pages.length)
