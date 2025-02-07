@@ -1,5 +1,7 @@
 class Riddle{
-    constructor(){
+    constructor(makeRiddleButtonBackgrounds, makeRiddleTextColors){
+        this.makeRiddleButtonBackgrounds = makeRiddleButtonBackgrounds
+        this.makeRiddleTextColors = makeRiddleTextColors
         this.riddleDivs = selectAll('#riddle div')
         this.riddleButtons = []
         this.itemSize = 200
@@ -8,7 +10,28 @@ class Riddle{
         this.secondsLeft = 180 
         this.timer = setInterval( () => this.countdown(), 1000 )
         this.solutionOrder = ['white', 'black', 'blue', 'green', 'white', 'blue', 'green', 'red'] 
+        //Holder øje med hvilken plads i solution arrayet vi er nået til 
+        this.currentColor = 0
         this.makeRiddleButtons()
+    }
+
+    checkRiddle(riddleButton){
+        if(riddleButton.col == this.solutionOrder[this.currentColor]){
+            this.currentColor++
+            riddleButton.showCorrect()
+        }else{
+            this.currentColor = 0
+            for(const rb of this.riddleButtons){
+                rb.showError()
+            }
+        }
+        //tjek om gåden er løst 
+        if(this.currentColor == this.solutionOrder.length){
+            select('#helpText').html('')
+            select('#result').html('Tillykke du har vundet alt i hele universet <br>- koden du skal bruge er 42')
+            clearInterval(this.timer)
+            shiftPage(5)
+        }
     }
 
     makeRiddleButtons(){
@@ -17,7 +40,15 @@ class Riddle{
         //så tager vi hver af de fem div'er fra html og laver dem til nye instanser af klassen RiddleButton
         //vi gemmer dem også i klassens eget array: riddleButtons 
         for(const div of this.riddleDivs ){
-            this.riddleButtons.push(new RiddleButton(this, div.attribute('data-color'), startX, this.yPos, this.itemSize))
+            let bg = null
+            if(this.makeRiddleButtonBackgrounds){
+                bg = div.attribute('data-bg')
+            }
+            let tc = null
+            if(this.makeRiddleTextColors){
+                tc = div.attribute('data-text')
+            }
+            this.riddleButtons.push(new RiddleButton(this, div.attribute('data-color'), startX, this.yPos, bg, tc))
             startX += this.itemSize + this.itemGap
         }
     }
@@ -32,6 +63,7 @@ class Riddle{
             select('#hint').html('Du skal bruge knappens farve og sidens baggrundsfarve til at regne rækkefølgen ud')
         }
         if(this.secondsLeft == 0){
+            select('#helpText').html('')
             select('#result').html('Du har tabt - rejsen slutter her')
             clearInterval(this.timer)
             shiftPage(5)
@@ -41,10 +73,30 @@ class Riddle{
 }
 
 class RiddleButton{
-    constructor(riddle, col, x, y, size){
+    constructor(riddle, col, x, y, background, text){
+        this.background = background
+        this.text = text
         this.button = createButton(col)
+        this.col = col
+        this.riddle = riddle 
         this.button.position(x, y)
         this.button.style('z-index', '5')
+        if(this.background){
+            this.button.style('background', this.background)
+        }
+        if(this.text){
+            this.button.style('color', this.text)
+        }
+        this.button.addClass('riddleButton')
+        this.button.mousePressed( ()=> this.riddle.checkRiddle(this) )
+    }
+    showCorrect(){
+        this.button.addClass('correct')
+        setTimeout( ()=>this.button.removeClass('correct'), 500 )
+    }
+    showError(){
+        this.button.addClass('error')
+        setTimeout( ()=>this.button.removeClass('error'), 500 )
     }
 }
 
@@ -90,7 +142,10 @@ class Ball{
         this.ballY = -this.ballX
         this.ballButton = createButton(this.ballLink)
         this.ballButton.size(this.ballDiameter, this.ballDiameter)
-        this.ballButton.mousePressed( () => shiftPage(this.ballPage) )
+        this.ballButton.mousePressed( () => {
+            shiftPage(this.ballPage)
+            this.ballVelocity += 12
+        })
     }
     show(){
         noStroke()

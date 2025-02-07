@@ -13,7 +13,7 @@ function setup(){
 
     //
     menu = new MenuMaker()
-    riddle = new Riddle()
+    riddle = new Riddle(true, true)
 
 }
 
@@ -32,4 +32,9 @@ function shiftPage(num){
     select("#page" + currentPage).addClass('visible')
 }
 
-
+function keyPressed(){
+    if(key == "Enter"){
+        let fs = fullscreen()
+        fullscreen(!fs)
+    }
+}

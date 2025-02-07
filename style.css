@@ -36,6 +36,22 @@ button {
     z-index:3;
     border-radius:50%;
     font-size:4rem;
+    text-shadow: 2px 2px 0px black;
+    display:grid;
+    place-items:center;
+}
+
+.riddleButton{
+    border-radius:1rem;
+    width:20rem;
+    height:10rem;
+    transition: .5s all ease-in-out;
+}
+.riddleButton.correct{
+    border:10px solid lightgreen;
+}
+.riddleButton.error{
+    border:10px solid red;
 }
 
 .visible{
@@ -57,7 +73,7 @@ button {
     background-color: red;
 }
 #page5{
-    background-color: khaki;
+    background-color: brown;
 }
 
 h1{
